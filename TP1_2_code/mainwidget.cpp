@@ -190,7 +190,7 @@ void MainWidget::initShaders()
 void MainWidget::initTextures()
 {
     // Load cube.png image
-    texture = new QOpenGLTexture(QImage("../cube/rock.png"));
+    texture = new QOpenGLTexture(QImage("../cube/grass.png"));
 
     // Set nearest filtering mode for texture minification
     texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -199,8 +199,37 @@ void MainWidget::initTextures()
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
 
     // Wrap texture coordinates by repeating
+
     // f.ex. texture coordinate (1.1, 1.2) is same as (0.1, 0.2)
     texture->setWrapMode(QOpenGLTexture::Repeat);
+
+    // Load cube.png image
+    texture1 = new QOpenGLTexture(QImage("../cube/grass.png"));
+
+    // Set nearest filtering mode for texture minification
+    texture1->setMinificationFilter(QOpenGLTexture::Nearest);
+
+    // Set bilinear filtering mode for texture magnification
+    texture1->setMagnificationFilter(QOpenGLTexture::Linear);
+
+    // Wrap texture coordinates by repeating
+
+    // f.ex. texture coordinate (1.1, 1.2) is same as (0.1, 0.2)
+    texture1->setWrapMode(QOpenGLTexture::Repeat);
+
+
+    // Load cube.png image
+    texture2 = new QOpenGLTexture(QImage("../cube/grass.png"));
+
+    // Set nearest filtering mode for texture minification
+    texture2->setMinificationFilter(QOpenGLTexture::Nearest);
+
+    // Set bilinear filtering mode for texture magnification
+    texture2->setMagnificationFilter(QOpenGLTexture::Linear);
+
+    // Wrap texture coordinates by repeating
+    // f.ex. texture coordinate (1.1, 1.2) is same as (0.1, 0.2)
+    texture2->setWrapMode(QOpenGLTexture::Repeat);
 }
 //! [4]
 

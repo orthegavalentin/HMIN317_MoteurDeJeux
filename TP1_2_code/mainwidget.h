@@ -92,6 +92,9 @@ private:
     GeometryEngine *geometries = nullptr;
 
     QOpenGLTexture *texture = nullptr;
+    QOpenGLTexture *texture1 = nullptr;
+    QOpenGLTexture *texture2 = nullptr;
+
 
     QMatrix4x4 projection;
 

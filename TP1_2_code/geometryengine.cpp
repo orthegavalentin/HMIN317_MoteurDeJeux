@@ -58,7 +58,7 @@
 struct VertexData
 {
     QVector3D position;
-   QVector2D texCoord;
+    QVector2D texCoord;
 };
 
 //! [0]
@@ -72,9 +72,9 @@ GeometryEngine::GeometryEngine()
     indexBuf.create();
 
     // Initializes cube geometry and transfers it to VBOs
-   // initCubeGeometry();
-  //initPlaneGeometry(16,16);
-   initHeightMapGeometry(16,16);
+    // initCubeGeometry();
+    //initPlaneGeometry(16,16);
+    initHeightMapGeometry(16,16);
 
 }
 
@@ -103,21 +103,21 @@ void GeometryEngine::initPlaneGeometry(int columns,int rows)
         //std::cout << std::endl;
     }
     int temp;
-       //int taille=3*2*(n-1)*(m-1)+((m-2)*2);
-int taille=3*2*(n-1)*(m-1);
-       GLushort  indexes[taille];
+    //int taille=3*2*(n-1)*(m-1)+((m-2)*2);
+    int taille=3*2*(n-1)*(m-1);
+    GLushort  indexes[taille];
 
-   int offset=0;
+    int offset=0;
 
-   bool retrieved=false;
-       for(int j=0;j<m-1;j++){
+    bool retrieved=false;
+    for(int j=0;j<m-1;j++){
 
 
-           retrieved=false;
-           for(int i=0;i<n-1;i++){
+        retrieved=false;
+        for(int i=0;i<n-1;i++){
 
-               indexes[i+offset+j*n]=i+j*n;
-                offset++;
+            indexes[i+offset+j*n]=i+j*n;
+            offset++;
             /* if(j>0&&retrieved==false){
                    indexes[i+offset+j*n]=i+j*n;
                 offset++;
@@ -128,44 +128,44 @@ int taille=3*2*(n-1)*(m-1);
 
 
 
-               indexes[i+offset+j*n]=n*(j+1)+i;
-                offset++;
+            indexes[i+offset+j*n]=n*(j+1)+i;
+            offset++;
 
-               indexes[i+offset+j*n]=(i+1)+j*n;
-                 offset++;
+            indexes[i+offset+j*n]=(i+1)+j*n;
+            offset++;
 
-               indexes[i+offset+j*n]=(i+1)+j*n;
-               offset++;
-
-
-               indexes[i+offset+j*n]=n*(j+1)+i;
-               offset++;
+            indexes[i+offset+j*n]=(i+1)+j*n;
+            offset++;
 
 
-               indexes[i+offset+j*n]=(i+1)+n+(j*n);
-               temp=(i+1)+n+(j*n);
+            indexes[i+offset+j*n]=n*(j+1)+i;
+            offset++;
 
 
+            indexes[i+offset+j*n]=(i+1)+n+(j*n);
+            temp=(i+1)+n+(j*n);
 
 
 
-           }
-           offset--;
-          // indexes[offset+(m-1)+(j)*n]=temp;
-
-}
-
-       for(int j=0;j<taille;j++){
 
 
+        }
+        offset--;
+        // indexes[offset+(m-1)+(j)*n]=temp;
 
-                  //std::cout<<"i=  "<<j<<"   "<<indexes[j]<<std::endl;
+    }
+
+    for(int j=0;j<taille;j++){
 
 
 
-           }
+        //std::cout<<"i=  "<<j<<"   "<<indexes[j]<<std::endl;
 
-//! [1]
+
+
+    }
+
+    //! [1]
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
     arrayBuf.allocate(vertices, n*n * sizeof(VertexData));
@@ -173,7 +173,7 @@ int taille=3*2*(n-1)*(m-1);
     // Transfer index data to VBO 1
     indexBuf.bind();
     indexBuf.allocate(indexes, 1350*sizeof(GLushort));
-//! [1]
+    //! [1]
 }
 
 void GeometryEngine::initCubeGeometry()
@@ -227,15 +227,15 @@ void GeometryEngine::initCubeGeometry()
     // connecting strips have same vertex order then only last
     // index of the first strip needs to be duplicated.
     GLushort indices[] = {
-         0,  1,  2,  3,  3,     // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
-         4,  4,  5,  6,  7,  7, // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
-         8,  8,  9, 10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
+        0,  1,  2,  3,  3,     // Face 0 - triangle strip ( v0,  v1,  v2,  v3)
+        4,  4,  5,  6,  7,  7, // Face 1 - triangle strip ( v4,  v5,  v6,  v7)
+        8,  8,  9, 10, 11, 11, // Face 2 - triangle strip ( v8,  v9, v10, v11)
         12, 12, 13, 14, 15, 15, // Face 3 - triangle strip (v12, v13, v14, v15)
         16, 16, 17, 18, 19, 19, // Face 4 - triangle strip (v16, v17, v18, v19)
         20, 20, 21, 22, 23      // Face 5 - triangle strip (v20, v21, v22, v23)
     };
 
-//! [1]
+    //! [1]
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
     arrayBuf.allocate(vertices, 24 * sizeof(VertexData));
@@ -243,7 +243,7 @@ void GeometryEngine::initCubeGeometry()
     // Transfer index data to VBO 1
     indexBuf.bind();
     indexBuf.allocate(indices, 34 * sizeof(GLushort));
-//! [1]
+    //! [1]
 }
 
 //! [2]
@@ -277,36 +277,36 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program)
 void GeometryEngine::drawPlaneGeometry(QOpenGLShaderProgram *program,int columns,int rows)
 {
 
-    int taille=3*2*(columns-1)*(rows-1)+((rows-2)*2);
+     int taille=508;
 
     // Tell OpenGL which VBOs to use
-       arrayBuf.bind();
-       indexBuf.bind();
+    arrayBuf.bind();
+    indexBuf.bind();
 
-       // Offset for position
-       quintptr offset = 0;
+    // Offset for position
+    quintptr offset = 0;
 
-       // Tell OpenGL programmable pipeline how to locate vertex position data
-       int vertexLocation = program->attributeLocation("a_position");
-       program->enableAttributeArray(vertexLocation);
-       program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
+    // Tell OpenGL programmable pipeline how to locate vertex position data
+    int vertexLocation = program->attributeLocation("a_position");
+    program->enableAttributeArray(vertexLocation);
+    program->setAttributeBuffer(vertexLocation, GL_FLOAT, offset, 3, sizeof(VertexData));
 
-       // Offset for texture coordinate
-       offset += sizeof(QVector3D);
+    // Offset for texture coordinate
+    offset += sizeof(QVector3D);
 
-       // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-       int texcoordLocation = program->attributeLocation("a_texcoord");
-       program->enableAttributeArray(texcoordLocation);
-       program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
+    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
+    int texcoordLocation = program->attributeLocation("a_texcoord");
+    program->enableAttributeArray(texcoordLocation);
+    program->setAttributeBuffer(texcoordLocation, GL_FLOAT, offset, 2, sizeof(VertexData));
 
-       /*offset += sizeof(QVector2D);
+    /*offset += sizeof(QVector2D);
        //color
        int colorLocation = program->attributeLocation("a_color");
        program->enableAttributeArray(colorLocation);
        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));*/
 
-       // Draw cube geometry using indices from VBO 1
-       glDrawElements(GL_TRIANGLE_STRIP, 1350, GL_UNSIGNED_SHORT, 0);
+    // Draw cube geometry using indices from VBO 1
+    glDrawElements(GL_TRIANGLE_STRIP, 508, GL_UNSIGNED_SHORT, 0);
 
 
 }
@@ -320,91 +320,99 @@ void GeometryEngine::initHeightMapGeometry(int columns, int rows){
     int m=rows;
     // For plane, we need 8 vertices on the same plane z=0
     VertexData vertices[n*n] ;
-     QImage img = QImage("../cube/rock.png");
+    int taille=508;
+    std::cout<<"taille ="<<taille<<std::endl;
+    QImage img = QImage("../cube/grass.png");
 
     for(int j = 0; j < m; j++) {
         for(int i = 0; i < n; i++) {
 
-            float z = img.pixelColor(i*img.width()/(float)n,
-                                                 j*img.height()/(float)n).black()/512.f;
+           float z = img.pixelColor(i*img.width()/(float)n,
+                                     j*img.height()/(float)n).black()/512.f;
 
             vertices[i+j*n] = {QVector3D((float)i/n, (float)j/n, z), QVector2D((float)i/(n-1),(float) j/(n-1))};
 
         }
         //std::cout << std::endl;
     }
+
     int temp;
-       //int taille=3*2*(n-1)*(m-1)+((m-2)*2);
-int taille=3*2*(n-1)*(m-1);
-       GLushort  indexes[taille];
-
-   int offset=0;
-
-   bool retrieved=false;
-       for(int j=0;j<m-1;j++){
 
 
-           retrieved=false;
-           for(int i=0;i<n-1;i++){
+    GLushort indexes[taille];
 
-               indexes[i+offset+j*n]=i+j*n;
-                offset++;
-            /* if(j>0&&retrieved==false){
-                   indexes[i+offset+j*n]=i+j*n;
+    int offset=0;
+
+    bool retrieved=false;
+    for(GLushort j=0;j<m-1;j++){
+
+
+        retrieved=false;
+
+        for(GLushort i=0;i<=n-2;i+=2){
+
+            indexes[offset+j*n]=(i)+j*n;
+            offset++;
+            if(j>0&&retrieved==false){
+                indexes[offset+j*n]=(i)+j*n;
                 offset++;
                 retrieved=true;
 
-                }*/
+            }
 
 
 
 
-               indexes[i+offset+j*n]=n*(j+1)+i;
-                offset++;
+            indexes[offset+j*n]=(i+n)+j*n;
+            offset++;
 
-               indexes[i+offset+j*n]=(i+1)+j*n;
-                 offset++;
-
-               indexes[i+offset+j*n]=(i+1)+j*n;
-               offset++;
+            indexes[offset+j*n]=(i+1)+j*n;
+            offset++;
 
 
-               indexes[i+offset+j*n]=n*(j+1)+i;
-               offset++;
 
 
-               indexes[i+offset+j*n]=(i+1)+n+(j*n);
-               temp=(i+1)+n+(j*n);
+            indexes[offset+j*n]=(i+1)+n+(j*n);
+            offset++;
+            temp=(i+1)+n+(j*n);
 
 
 
 
 
-           }
-           offset--;
-          // indexes[offset+(m-1)+(j)*n]=temp;
+        }
 
-}
+        if(j<m-2)
+        {
+            indexes[offset+j*n]=temp;
+            offset++;
+        }
 
-       for(int j=0;j<taille;j++){
-
-
-
-                  //std::cout<<"i=  "<<j<<"   "<<indexes[j]<<std::endl;
+        offset-=n;
 
 
 
-           }
 
-//! [1]
+
+
+
+
+    }
+
+
+
+
+
+
+    //! [1]
     // Transfer vertex data to VBO 0
     arrayBuf.bind();
     arrayBuf.allocate(vertices, n*n * sizeof(VertexData));
 
     // Transfer index data to VBO 1
     indexBuf.bind();
-    indexBuf.allocate(indexes, 1350*sizeof(GLushort));
-//! [1]
+    indexBuf.allocate(indexes, sizeof(indexes));
+    //! [1]
 
 
 
