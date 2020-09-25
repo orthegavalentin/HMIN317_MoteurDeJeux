@@ -52,16 +52,16 @@
 
 #include <QMouseEvent>
 
-#include <math.h>
+#include <cmath>
+#include<iostream>
 
-MainWidget::MainWidget(QWidget *parent) :
-    QOpenGLWidget(parent),
-    geometries(0),
-    texture(0),
-    angularSpeed(0)
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
+MainWidget::MainWidget(QWidget *parent):QOpenGLWidget(parent),
+    rotationAxis(0,0,1)
 {
-}
 
+}
 MainWidget::~MainWidget()
 {
     // Make sure the context is current when deleting the texture
@@ -79,12 +79,41 @@ void MainWidget::mousePressEvent(QMouseEvent *e)
     mousePressPosition = QVector2D(e->localPos());
 }
 
+void MainWidget::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Q) {
+        cameraPosition += QVector3D(-0.1, 0, 0);
+        update();
+    }
+    if(event->key() == Qt::Key_D) {
+        cameraPosition += QVector3D(+0.1, 0, 0);
+        update();
+    }
+
+    if(event->key() == Qt::Key_Z) {
+        cameraPosition += QVector3D(0, +0.1, 0);
+        update();
+    }
+    if(event->key() == Qt::Key_S) {
+        cameraPosition += QVector3D(0, -0.1, 0);
+        update();
+    }
+    if(event->key() == Qt::Key_V) {
+        cameraPosition += QVector3D(0, 0, +0.1);
+        update();
+    }
+    if(event->key() == Qt::Key_B) {
+        cameraPosition += QVector3D(0, 0, -0.1);
+        update();
+    }
+}
+
 void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     // Mouse release position - mouse press position
     QVector2D diff = QVector2D(e->localPos()) - mousePressPosition;
 
-    // Rotation axis is perpendicular to the mouse position difference
+    // tion axis is perpendicular to the mouse position difference
     // vector
     QVector3D n = QVector3D(diff.y(), diff.x(), 0.0).normalized();
 
@@ -102,19 +131,12 @@ void MainWidget::mouseReleaseEvent(QMouseEvent *e)
 //! [1]
 void MainWidget::timerEvent(QTimerEvent *)
 {
-    // Decrease angular speed (friction)
-    angularSpeed *= 0.99;
 
-    // Stop rotation when speed goes below threshold
-    if (angularSpeed < 0.01) {
-        angularSpeed = 0.0;
-    } else {
-        // Update rotation
         rotation = QQuaternion::fromAxisAndAngle(rotationAxis, angularSpeed) * rotation;
 
         // Request an update
         update();
-    }
+
 }
 //! [1]
 
@@ -132,13 +154,14 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-    glEnable(GL_CULL_FACE);
+//glEnable(GL_CULL_FACE);
 //! [2]
 
     geometries = new GeometryEngine;
 
     // Use QBasicTimer because its faster than QTimer
     timer.start(12, this);
+  cameraPosition = QVector3D(0.0,0.0,-5.0);
 }
 
 //! [3]
@@ -154,7 +177,8 @@ void MainWidget::initShaders()
 
     // Link shader pipeline
     if (!program.link())
-        close();
+    {close();
+    ;}
 
     // Bind shader pipeline for use
     if (!program.bind())
@@ -166,7 +190,7 @@ void MainWidget::initShaders()
 void MainWidget::initTextures()
 {
     // Load cube.png image
-    texture = new QOpenGLTexture(QImage(":/cube.png").mirrored());
+    texture = new QOpenGLTexture(QImage("../cube/rock.png"));
 
     // Set nearest filtering mode for texture minification
     texture->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -187,7 +211,7 @@ void MainWidget::resizeGL(int w, int h)
     qreal aspect = qreal(w) / qreal(h ? h : 1);
 
     // Set near plane to 3.0, far plane to 7.0, field of view 45 degrees
-    const qreal zNear = 3.0, zFar = 7.0, fov = 45.0;
+    const qreal zNear = 1.0, zFar = 100.0, fov = 45.0;
 
     // Reset projection
     projection.setToIdentity();
@@ -207,7 +231,8 @@ void MainWidget::paintGL()
 //! [6]
     // Calculate model view transformation
     QMatrix4x4 matrix;
-    matrix.translate(0.0, 0.0, -5.0);
+    matrix.translate(cameraPosition);
+
     matrix.rotate(rotation);
 
     // Set modelview-projection matrix
@@ -215,8 +240,9 @@ void MainWidget::paintGL()
 //! [6]
 
     // Use texture unit 0 which contains cube.png
-    program.setUniformValue("texture", 0);
+   program.setUniformValue("texture", 0);
 
     // Draw cube geometry
-    geometries->drawCubeGeometry(&program);
+   // geometries->drawCubeGeometry(&program);
+    geometries->drawPlaneGeometry(&program,16,16);
 }

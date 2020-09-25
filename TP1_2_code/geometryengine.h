@@ -51,23 +51,27 @@
 #ifndef GEOMETRYENGINE_H
 #define GEOMETRYENGINE_H
 
-#include <QOpenGLFunctions_3_1>
+#include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 
-class GeometryEngine : protected QOpenGLFunctions_3_1
+class GeometryEngine : protected QOpenGLFunctions
 {
 public:
     GeometryEngine();
     virtual ~GeometryEngine();
 
     void drawCubeGeometry(QOpenGLShaderProgram *program);
+    void drawPlaneGeometry(QOpenGLShaderProgram *program,int columns,int rows);
 
 private:
     void initCubeGeometry();
+    void initPlaneGeometry(int columns,int rows);
+    void initHeightMapGeometry(int columns,int rows);
 
     QOpenGLBuffer arrayBuf;
     QOpenGLBuffer indexBuf;
+    QOpenGLBuffer elementBuf;
 };
 
 #endif // GEOMETRYENGINE_H
