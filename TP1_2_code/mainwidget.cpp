@@ -77,6 +77,7 @@ void MainWidget::mousePressEvent(QMouseEvent *e)
 {
     // Save mouse press position
     mousePressPosition = QVector2D(e->localPos());
+    angularSpeed =0;
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *event)
@@ -154,7 +155,7 @@ void MainWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     // Enable back face culling
-//glEnable(GL_CULL_FACE);
+glEnable(GL_CULL_FACE);
 //! [2]
 
     geometries = new GeometryEngine;
@@ -204,7 +205,7 @@ void MainWidget::initTextures()
     texture->setWrapMode(QOpenGLTexture::Repeat);
 
     // Load cube.png image
-    texture1 = new QOpenGLTexture(QImage("../cube/grass.png"));
+    texture1 = new QOpenGLTexture(QImage("../cube/rock.png"));
 
     // Set nearest filtering mode for texture minification
     texture1->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -219,7 +220,7 @@ void MainWidget::initTextures()
 
 
     // Load cube.png image
-    texture2 = new QOpenGLTexture(QImage("../cube/grass.png"));
+    texture2 = new QOpenGLTexture(QImage("../cube/snowrocks.png"));
 
     // Set nearest filtering mode for texture minification
     texture2->setMinificationFilter(QOpenGLTexture::Nearest);
@@ -254,8 +255,21 @@ void MainWidget::paintGL()
 {
     // Clear color and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    glActiveTexture(GL_TEXTURE0);
     texture->bind();
+    glActiveTexture(GL_TEXTURE1);
+    texture1->bind();
+
+    glActiveTexture(GL_TEXTURE2);
+    texture2->bind();
+
+
+
+    // Use texture unit 0 which contains cube.png
+   program.setUniformValue("texture", 0);
+   program.setUniformValue("texture1", 1);
+   program.setUniformValue("texture2", 2);
+
 
 //! [6]
     // Calculate model view transformation
@@ -268,8 +282,7 @@ void MainWidget::paintGL()
     program.setUniformValue("mvp_matrix", projection * matrix);
 //! [6]
 
-    // Use texture unit 0 which contains cube.png
-   program.setUniformValue("texture", 0);
+
 
     // Draw cube geometry
    // geometries->drawCubeGeometry(&program);

@@ -277,7 +277,7 @@ void GeometryEngine::drawCubeGeometry(QOpenGLShaderProgram *program)
 void GeometryEngine::drawPlaneGeometry(QOpenGLShaderProgram *program,int columns,int rows)
 {
 
-     int taille=508;
+      int taille=((columns*rows)/2-1)*4;
 
     // Tell OpenGL which VBOs to use
     arrayBuf.bind();
@@ -306,7 +306,7 @@ void GeometryEngine::drawPlaneGeometry(QOpenGLShaderProgram *program,int columns
        program->setAttributeBuffer(colorLocation, GL_FLOAT, offset, 3, sizeof(VertexData));*/
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLE_STRIP, 508, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLE_STRIP, taille, GL_UNSIGNED_SHORT, 0);
 
 
 }
@@ -320,17 +320,19 @@ void GeometryEngine::initHeightMapGeometry(int columns, int rows){
     int m=rows;
     // For plane, we need 8 vertices on the same plane z=0
     VertexData vertices[n*n] ;
-    int taille=508;
-    std::cout<<"taille ="<<taille<<std::endl;
-    QImage img = QImage("../cube/grass.png");
+    int taille=((columns*rows)/2-1)*4;
+
+
+    QImage img = QImage("../cube/heightmap.png");
 
     for(int j = 0; j < m; j++) {
         for(int i = 0; i < n; i++) {
 
            float z = img.pixelColor(i*img.width()/(float)n,
                                      j*img.height()/(float)n).black()/512.f;
+           std::cout<<"z ="<<z<<std::endl;
 
-            vertices[i+j*n] = {QVector3D((float)i/n, (float)j/n, z), QVector2D((float)i/(n-1),(float) j/(n-1))};
+            vertices[i+j*n] = {QVector3D((float)(i-n/2)/n, (float)(j-n/2)/n, z), QVector2D((float)i/(n-1),(float) j/(n-1))};
 
         }
         //std::cout << std::endl;
